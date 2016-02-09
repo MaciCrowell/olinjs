@@ -1,5 +1,5 @@
 var express = require('express');
-var db = require('../fakeDatabase');
+// var db = require('../fakeDatabase');
 var Cat = require('../models/catModel.js');
 var router = express.Router();
 
@@ -21,17 +21,25 @@ var newCat = function(req, res){
 	var name = nameList[Math.floor(Math.random()*nameList.length)];
 	var age = Math.floor((Math.random() * 20) + 1);
 	var colors = getRandomSubarray(colorList,Math.floor(Math.random()*4)+1)
-	var cat = Cat({"name":name, "age":age, "colors": colors})
+	//use new with a constructor generally. It may have weird behavior if you don't.
+	var cat = new Cat({"name":name, "age":age, "colors": colors})
 	cat.save(function (err, catm) {
-	  if (err) return console.error(err)
-	});
-	console.log(cat.name)
-	res.render("cat", {"action":"Added Cat!","cat": cat});
+	  if (err)  {
+	  	console.error(err)
+	  //you probably only want to render if save was successful and tell the client it wasn't successful if error occured
+	    res.status(500).send("Error something bad")
+	  }
+	  else {
+	  	console.log(cat.name)
+	    res.render("cat", {"action":"Added Cat!","cat": cat});
+	  }
+	});	
 };
 
 var listCats = function(req, res){
-	var cats = db.getAll();
+	// var cats = db.getAll(); no longer used
 	Cat.find().sort('age').exec(function (err, cats) {
+		//see above
 	  if (err) return console.error(err);
 	  res.render("cats", {"cats": cats});
 	})
