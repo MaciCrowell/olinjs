@@ -5,6 +5,11 @@ var router = express.Router();
 
 module.exports = router;
 
+// In general, remove log statements when you push final version of app to "master"
+// It is also nice to include the methods of your API as part of a routes = {} object 
+// and instantiate the functions as routes.ordersGet = function(){...} and in the
+// bottom of your order.js export module.exports = routes
+
 var ordersGET = function(req, res) {
 	Order.find({complete: false}).populate('ingredients').exec( function(err, orders) {
 		res.render("ordersView", {"orders": orders});
@@ -39,6 +44,7 @@ var completeOrderPOST = function(req, res) {
 	});
 }
 
+// Your way is nice too, but you get to onlu export once instead of 4 times with the afore-mentioned way.
 module.exports.orders = ordersGET;
 module.exports.newOrder = newOrderGET;
 module.exports.submitOrder = submitOrderPOST;

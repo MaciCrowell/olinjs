@@ -69,6 +69,7 @@ var onError = function(data, status) {
 	console.log("error", data);
 };
 
+// Nice grouping for the event handlers. Very readable and structured. 
 var eventHandlers = {
 	addIngred: function(event) {
 		event.preventDefault();
